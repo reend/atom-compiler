@@ -2,6 +2,7 @@
 #include "token.hpp"
 #include <stdexcept>
 #include <unordered_map>
+#include <iostream>
 
 namespace
 {
@@ -62,7 +63,7 @@ char Lexer::advance()
 
     char c = source_[pos_++];
 
-    if (c == '\0') 
+    if (c == '\n') 
     {
         ++line_;
         column_ = 1;
@@ -111,7 +112,7 @@ void Lexer::skipWhitespace()
                 }
                 break;
             default:
-                break;
+                return;
         }
     }
 }
@@ -167,11 +168,13 @@ Token Lexer::scanIdentifier()
 
 Token Lexer::nextToken()
 {
+    std::cerr << "Before skipWhitespace\n";
     skipWhitespace();
+    std::cerr << "After skipWhitespace\n";
 
     const std::size_t start = pos_;
     const std::size_t line = line_;
-    const std::size_t column = column;
+    const std::size_t column = column_;
 
     if (atEnd())
     {
@@ -285,7 +288,11 @@ std::vector<Token> Lexer::tokenize()
 
     while (true)
     {
+        std::cerr << "Before: pos_ = " << pos_ << "\n";
         Token token = nextToken();
+        std::cerr << "After: pos_ = " << pos_
+                  << ", lexeme = " << token.lexeme << "\n";
+
         tokens.push_back(token);
 
         if (token.kind == TokenKind::Eof)

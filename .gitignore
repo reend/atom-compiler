@@ -1,0 +1,37 @@
+# Executable
+/atomc
+
+# Build directories
+/build/
+/bin/
+/obj/
+
+# Object files
+*.o
+
+# Dependency files
+*.d
+
+# Generated assembly
+*.s
+*.asm
+
+# Libraries
+*.a
+*.so
+
+# Debug and crash files
+*.out
+*.core
+core
+core.*
+
+# IDE and editors
+.vscode/
+.idea/
+.cache/
+*.swp
+*.swo
+
+# Compilation database
+compile_commands.json
