@@ -45,3 +45,25 @@ struct IdentifierExpr : Expr
 {
     std::string_view name;
 };
+
+struct BinaryExpr : Expr 
+{
+    TokenKind op;
+
+    std::unique_ptr<Expr> left;
+    std::unique_ptr<Expr> right;
+};
+
+struct UnaryExpr : Expr 
+{
+    TokenKind op;
+
+    std::unique_ptr<Expr> operand;
+};
+
+struct CallExpr : Expr 
+{
+    std::string_view callee;
+
+    std::vector<std::unique_ptr<Expr>> arguments;
+};
