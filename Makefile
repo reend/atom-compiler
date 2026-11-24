@@ -4,7 +4,8 @@ CXXFLAGS := -std=c++20 -Wall -Wextra -Wpedantic -g
 TARGET := atomc
 
 SOURCES := main.cpp \
-           frontend/lexer.cpp
+           frontend/lexer.cpp \
+		   frontend/token.cpp
 
 OBJECTS := $(SOURCES:.cpp=.o)
 DEPS := $(OBJECTS:.o=.d)

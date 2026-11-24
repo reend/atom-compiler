@@ -1,0 +1,41 @@
+// Function with parameters
+fn sum(a: i64, b: i64) -> i64
+{
+    return a + b;
+}
+
+fn main() -> i64
+{
+    mut x: i64 = 10;
+    const y: i64 = 20;
+    const flag: bool = true;
+    const other: bool = false;
+
+    // Arithmetic operators
+    x = x + 1;
+    x = x - 2;
+    x = x * 3;
+    x = -42;
+
+    // Comparison operators
+    if (x == y)
+    {
+        x = 1;
+    }
+    else
+    {
+        x = 0;
+    }
+
+    while (x < 100)
+    {
+        x = x + 1;
+    }
+
+    const a: bool = x != y;
+    const b: bool = x > y;
+    const c: bool = x <= y;
+    const d: bool = x >= y;
+
+    return sum(x, y);
+}

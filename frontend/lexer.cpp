@@ -168,9 +168,7 @@ Token Lexer::scanIdentifier()
 
 Token Lexer::nextToken()
 {
-    std::cerr << "Before skipWhitespace\n";
     skipWhitespace();
-    std::cerr << "After skipWhitespace\n";
 
     const std::size_t start = pos_;
     const std::size_t line = line_;
@@ -288,10 +286,7 @@ std::vector<Token> Lexer::tokenize()
 
     while (true)
     {
-        std::cerr << "Before: pos_ = " << pos_ << "\n";
         Token token = nextToken();
-        std::cerr << "After: pos_ = " << pos_
-                  << ", lexeme = " << token.lexeme << "\n";
 
         tokens.push_back(token);
 

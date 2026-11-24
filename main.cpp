@@ -1,4 +1,5 @@
 #include "frontend/lexer.hpp"
+#include "frontend/token.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -36,7 +37,7 @@ int main(int argc, char* argv[])
         {
             std::cout << token.line << ":"
                       << token.column << " "
-                      << static_cast<int>(token.kind) << " "
+                      << tokenKindToString(token.kind) << " "
                       << token.lexeme << "\n";
         }
     }
