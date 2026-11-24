@@ -64,3 +64,5 @@ struct Token
     std::size_t line;
     std::size_t column;
 };
+
+std::string_view tokenKindToString(TokenKind kind);
