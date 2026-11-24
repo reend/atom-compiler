@@ -75,3 +75,24 @@ void Lexer::skipWhitespace()
         }
     }
 }
+
+Token Lexer::scanNumber()
+{
+    const std::size_t start = pos_;
+    const std::size_t line = line_;
+    const std::size_t column = column_;
+
+    while (!atEnd() && peek() >= '0' && peek() <= '9')
+    {
+        advance();
+    }
+
+    return Token
+    {
+        TokenKind::Integer,
+        source_.substr(start, pos_ - start),
+        line,
+        column
+    };
+}
+
