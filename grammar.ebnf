@@ -1,0 +1,64 @@
+proram = { function_decl } EOF ;
+
+function_decl = "fn" identifier
+                "(" [ parameter_list ] ")"
+                "->" type
+                block ;
+
+parameter_list = parameter { "," parameter } ;
+
+parameter = identifier ":" type ;
+
+type = "i64" | "bool" ;
+
+block = "{" { statement } "}" ;
+
+statement = variable_decl
+          | assignment
+          | return_stmt
+          | if_stmt 
+          | while_stmt ;
+
+
+variable_decl = ("mut" | "const") identifier
+                ":" type "=" expression ";" ;
+
+assignment = identifier "=" expression ";" ;
+
+return_stmt = "return" expression ";" ;
+
+if_stmt = "if" "(" expression ")" block
+          [ "else" block ] ;
+
+while_stmt = "while" "(" expression ")" block ;
+
+expression = equality ;
+
+equality = comparison
+           { ("==" | "!=") comparison } ;
+
+comparison = additive
+             { ("<" | ">" | "<=" | ">=") additive } ;
+
+additive = multiplicative
+           { ("+" | "-") multiplicative } ;
+
+multiplicative = unary { "*" unary } ;
+
+unary = "-" unary | primary ;
+
+primary = integer
+        | "true"
+        | "false"
+        | identifier [ "(" [ argument_list ] ")" ]
+        | "(" expression ")" ;
+
+argument_list = expression { "," expression } ;
+
+identifier = letter { letter | digit } ;
+
+integer = digit { digit } ;
+
+letter = "a" ... "z" | "A" ... "Z" | "_" ;
+
+digit = "0" ... "9" ;
