@@ -1,4 +1,44 @@
 #include "lexer.hpp"
+#include "token.hpp"
+#include <stdexcept>
+#include <unordered_map>
+
+namespace
+{
+    const std::unordered_map<std::string_view, TokenKind> keywords =
+    {
+        {"fn",     TokenKind::Fn},
+        {"mut",    TokenKind::Mut},
+        {"const",  TokenKind::Const},
+        {"if",     TokenKind::If},
+        {"else",   TokenKind::Else},
+        {"while",  TokenKind::While},
+        {"return", TokenKind::Return},
+
+        {"i64",    TokenKind::I64},
+        {"bool",   TokenKind::Bool},
+
+        {"true",   TokenKind::True},
+        {"false", TokenKind::False}
+    };
+
+    constexpr bool isDigit(char c)
+    {
+        return c >= '0' && c <= '9';
+    }
+
+    constexpr bool isAlpha(char c)
+    {
+        return (c >= 'a' && c <= 'z') ||
+               (c >= 'A' && c <= 'Z') ||
+               c == '_';
+    }
+
+    constexpr bool isAlphaNumeric(char c)
+    {
+        return isAlpha(c) || isDigit(c);
+    }
+}
 
 Lexer::Lexer(std::string_view source)
     : source_(source) {}
@@ -82,7 +122,7 @@ Token Lexer::scanNumber()
     const std::size_t line = line_;
     const std::size_t column = column_;
 
-    while (!atEnd() && peek() >= '0' && peek() <= '9')
+    while (!atEnd() && peek() >= '0' && isDigit(peek()))
     {
         advance();
     }
@@ -96,3 +136,163 @@ Token Lexer::scanNumber()
     };
 }
 
+Token Lexer::scanIdentifier()
+{
+    const std::size_t start = pos_;
+    const std::size_t line = line_;
+    const std::size_t column = column_;
+
+    while(!atEnd() && isAlphaNumeric(peek()))
+    {
+        advance();
+    }
+
+    const std::string_view lexeme = 
+        source_.substr(start, pos_ - start);
+
+    const auto it = keywords.find(lexeme);
+
+    const TokenKind kind = it != keywords.end()
+        ? it->second
+        : TokenKind::Identifier;
+
+    return Token 
+    {
+        kind, 
+        lexeme,
+        line,
+        column
+    };
+}
+
+Token Lexer::nextToken()
+{
+    skipWhitespace();
+
+    const std::size_t start = pos_;
+    const std::size_t line = line_;
+    const std::size_t column = column;
+
+    if (atEnd())
+    {
+        return Token 
+        {
+            TokenKind::Eof,
+            {},
+            line,
+            column
+        };
+    }
+
+    if (isDigit(peek()))
+    {
+        return scanNumber();
+    }
+
+    if (isAlpha(peek()))
+    {
+        return scanIdentifier();
+    }
+
+    TokenKind kind;
+
+    switch (advance())
+    {
+        case '+':
+            kind = TokenKind::Plus;
+            break;
+
+        case '-':
+            kind = match('>')
+                ? TokenKind::Arrow
+                : TokenKind::Minus;
+            break;
+
+        case '*':
+            kind = TokenKind::Star;
+            break;
+
+        case '=':
+            kind = match('=')
+                ? TokenKind::Equal
+                : TokenKind::Assign;
+            break;
+
+        case '!':
+            if (!match('='))
+            {
+                throw std::runtime_error("Exptected '=' after '!'");
+            }  
+            kind = TokenKind::NotEqual;
+            break;
+
+        case '<':
+            kind = match('=')
+                ? TokenKind::LessEqual
+                : TokenKind::Less;
+            break;
+
+        case '>':
+            kind = match('=')
+                ? TokenKind::GreaterEqual
+                : TokenKind::Greater;
+            break;
+
+        case '(':
+            kind = TokenKind::LParen;
+            break;
+
+        case ')':
+            kind = TokenKind::RParen;
+            break;
+
+        case '{':
+            kind = TokenKind::LBrace;
+            break;
+
+        case '}':
+            kind = TokenKind::RBrace;
+            break;
+
+        case ',':
+            kind = TokenKind::Comma;
+            break;
+
+        case ';':
+            kind = TokenKind::Semicolon;
+            break;
+
+        case ':':
+            kind = TokenKind::Colon;
+            break;
+
+        default:
+            throw std::runtime_error("Unexpected character");
+    }
+
+    return Token
+    {
+        kind,
+        source_.substr(start, pos_ - start),
+        line,
+        column
+    };
+}
+
+std::vector<Token> Lexer::tokenize()
+{
+    std::vector<Token> tokens;
+
+    while (true)
+    {
+        Token token = nextToken();
+        tokens.push_back(token);
+
+        if (token.kind == TokenKind::Eof)
+        {
+            break;
+        }
+    }
+
+    return tokens;
+}

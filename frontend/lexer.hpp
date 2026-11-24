@@ -7,7 +7,7 @@ class Lexer
 {
     public:
         explicit Lexer(std::string_view source);
-        std::vector<Token> tokenize;
+        std::vector<Token> tokenize();
 
     private:
         std::string_view source_;
