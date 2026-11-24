@@ -3,7 +3,8 @@
 #include <string_view>
 #include <vector>
 
-class Lexer {
+class Lexer 
+{
     public:
         explicit Lexer(std::string_view source);
         std::vector<Token> tokenize;
@@ -11,9 +12,9 @@ class Lexer {
     private:
         std::string_view source_;
 
-        std::size_t pos = 0;
-        std::size_t line = 1;
-        std::size_t column = 1;
+        std::size_t pos_ = 0;
+        std::size_t line_ = 1;
+        std::size_t column_ = 1;
 
         bool atEnd() const;
         char peek() const;

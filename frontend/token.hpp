@@ -1,26 +1,37 @@
 #pragma once
+
 #include <cstddef>
 #include <string_view>
 
-enum class TokenKind {
-    // keywords
+enum class TokenKind 
+{
+    // Keywords
     Fn,
-    Let,
+    Mut,
+    Const,
     If,
     Else,
     While,
     Return,
 
-    // literals and identifiers
+    // Types
+    I64,
+    Bool,
+
+    // Boolean literals
+    True,
+    False,
+
+    // Literals and identifiers
     Identifier,
     Integer,
 
-    // arithmetic
+    // Arithmetic
     Plus,
     Minus,
     Star,
 
-    // comparison
+    // Comparison
     Equal,
     NotEqual,
     Less,
@@ -28,25 +39,28 @@ enum class TokenKind {
     LessEqual,
     GreaterEqual,
 
-    // assignment
+    // Assignment
     Assign,
 
-    // delimiters
+    // Delimiters
     LParen,
     RParen,
     LBrace,
-    RBrace, 
+    RBrace,
     Comma,
     Semicolon,
+    Colon,
+    Arrow,
 
-    // eof
+    // End of file
     Eof
 };
 
-struct Token {
+struct Token 
+{
     TokenKind kind;
     std::string_view lexeme;
-    
+
     std::size_t line;
     std::size_t column;
 };
