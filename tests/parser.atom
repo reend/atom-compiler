@@ -1,0 +1,11 @@
+fn sum(a: i64, b: i64) -> i64
+{
+}
+
+fn check(x: i64) -> bool
+{
+}
+
+fn main() -> i64
+{
+}

@@ -1,5 +1,6 @@
 #include "frontend/lexer.hpp"
 #include "frontend/token.hpp"
+#include "frontend/parser.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -33,12 +34,25 @@ int main(int argc, char* argv[])
         Lexer lexer(source);
         const auto tokens = lexer.tokenize();
 
-        for (const auto& token : tokens)
+        Parser parser(tokens);
+
+        auto program = parser.parse();
+
+        std::cout << "Functions: "
+                << program->functions.size() << "\n";
+
+        for (const auto& function : program->functions)
         {
-            std::cout << token.line << ":"
-                      << token.column << " "
-                      << tokenKindToString(token.kind) << " "
-                      << token.lexeme << "\n";
+            std::cout << "Function: "
+                    << function->name << "\n";
+
+            std::cout << "Parameters: "
+                    << function->parameters.size() << "\n";
+
+            for (const auto& param : function->parameters)
+            {
+                std::cout << "  " << param.name << "\n";
+            }
         }
     }
     catch (const std::exception& e)

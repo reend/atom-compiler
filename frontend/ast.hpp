@@ -109,7 +109,7 @@ struct WhileStmt : Stmt
 struct Parameter : ASTNode
 {
     std::string_view name;
-    TypeKind kind;
+    TypeKind type;
 };
 
 struct FunctionDecl : ASTNode 

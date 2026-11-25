@@ -1,0 +1,24 @@
+fn number() -> i64
+{
+    return 42;
+}
+
+fn boolean() -> bool
+{
+    return true;
+}
+
+fn another() -> bool
+{
+    return false;
+}
+
+fn identity(x: i64) -> i64
+{
+    return x;
+}
+
+fn main() -> i64
+{
+    return identity((123));
+}

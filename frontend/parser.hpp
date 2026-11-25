@@ -29,4 +29,21 @@ class Parser
         bool match(TokenKind kind);
 
         const Token& expect(TokenKind kind);
+
+        std::unique_ptr<FunctionDecl> parseFunction();
+        Parameter parseParameter();
+        TypeKind parseType();
+        std::unique_ptr<BlockStmt> parseBlock();
+
+        std::unique_ptr<Stmt> parseStatement();
+
+        std::unique_ptr<VariableDecl> parseVariableDecl();
+        std::unique_ptr<AssignStmt> parseAssignment();
+        std::unique_ptr<ReturnStmt> parseReturn();
+        std::unique_ptr<IfStmt> parseIf();
+        std::unique_ptr<WhileStmt> parseWhile();
+
+        std::unique_ptr<Expr> parsePrimary();
+        std::unique_ptr<Expr> parseUnary();
+        std::unique_ptr<Expr> parseExpression(int minPrecedence = 1);
 };
