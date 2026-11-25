@@ -21,19 +21,15 @@ run_test()
     fi
 }
 
-# Valid syntax
+# Valid programs
 run_test tests/basic.atom 0
 run_test tests/lexer.atom 0
-run_test tests/parser.atom 0
 run_test tests/primary.atom 0
 run_test tests/unary.atom 0
 run_test tests/binary.atom 0
 run_test tests/variables.atom 0
 run_test tests/control_flow.atom 0
-run_test tests/precedence.atom 0
-run_test tests/expressions.atom 0
-run_test tests/empty.atom 0
-run_test tests/semantic_invalid.atom 0
+run_test tests/semantic_valid.atom 0
 
 # Invalid syntax
 run_test tests/invalid.atom 1
@@ -46,6 +42,17 @@ run_test tests/missing_semicolon.atom 1
 run_test tests/missing_brace.atom 1
 run_test tests/invalid_type.atom 1
 run_test tests/invalid_arguments.atom 1
+
+# Invalid semantics
+run_test tests/parser.atom 1
+run_test tests/precedence.atom 1
+run_test tests/expressions.atom 1
+run_test tests/empty.atom 1
+run_test tests/semantic_invalid.atom 1
+run_test tests/undefined_variable.atom 1
+run_test tests/immutable_assignment.atom 1
+run_test tests/invalid_operand.atom 1
+run_test tests/invalid_argument_type.atom 1
 
 echo
 echo "Passed: $passed"

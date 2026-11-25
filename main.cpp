@@ -2,6 +2,7 @@
 #include "frontend/token.hpp"
 #include "frontend/parser.hpp"
 #include "frontend/ast_printer.hpp"
+#include "frontend/semantic.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -37,6 +38,9 @@ int main(int argc, char* argv[])
 
         Parser parser(tokens);
         auto program = parser.parse();
+
+        SemanticAnalyzer semantic;
+        semantic.analyze(*program);
 
         ASTPrinter printer;
         printer.print(*program);

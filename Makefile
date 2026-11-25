@@ -7,7 +7,8 @@ SOURCES := main.cpp \
            frontend/lexer.cpp \
 		   frontend/token.cpp \
 		   frontend/parser.cpp \
-		   frontend/ast_printer.cpp
+		   frontend/ast_printer.cpp \
+		   frontend/semantic.cpp
  
 OBJECTS := $(SOURCES:.cpp=.o)
 DEPS := $(OBJECTS:.o=.d)
