@@ -5,7 +5,8 @@ TARGET := atomc
 
 SOURCES := main.cpp \
            frontend/lexer.cpp \
-		   frontend/token.cpp
+		   frontend/token.cpp \
+		   frontend/parser.cpp
 
 OBJECTS := $(SOURCES:.cpp=.o)
 DEPS := $(OBJECTS:.o=.d)
