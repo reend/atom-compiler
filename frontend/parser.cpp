@@ -3,11 +3,10 @@
 #include <stdexcept>
 #include <string>
 #include <charconv>
+#include <utility>
 
 Parser::Parser(const std::vector<Token>& tokens)
-    : tokens_(tokens)
-    {
-    }
+    : tokens_(tokens) {}
 
 const Token& Parser::peek() const
 {
@@ -210,12 +209,48 @@ std::unique_ptr<Stmt> Parser::parseStatement()
 
 std::unique_ptr<VariableDecl> Parser::parseVariableDecl()
 {
-    throw std::runtime_error("Variable parsing not implemented");
+    const Token& token = advance();
+
+    auto stmt = std::make_unique<VariableDecl>();
+
+    stmt->line = token.line;
+    stmt->column = token.column;
+    stmt->isMutable = token.kind == TokenKind::Mut;
+
+    const Token& name = expect(TokenKind::Identifier);
+
+    stmt->name = name.lexeme;
+
+    expect(TokenKind::Colon);
+
+    stmt->type = parseType();
+
+    expect(TokenKind::Assign);
+
+    stmt->initializer = parseExpression();
+
+    expect(TokenKind::Semicolon);
+
+    return stmt;
 }
 
 std::unique_ptr<AssignStmt> Parser::parseAssignment()
 {
-    throw std::runtime_error("Assignment parsing not implemented");
+    const Token& name = expect(TokenKind::Identifier);
+
+    auto stmt = std::make_unique<AssignStmt>();
+
+    stmt->line = name.line;
+    stmt->column = name.column;
+    stmt->name = name.lexeme;
+
+    expect(TokenKind::Assign);
+
+    stmt->value = parseExpression();
+
+    expect(TokenKind::Semicolon);
+
+    return stmt;
 }
 
 std::unique_ptr<ReturnStmt> Parser::parseReturn()
@@ -236,12 +271,47 @@ std::unique_ptr<ReturnStmt> Parser::parseReturn()
 
 std::unique_ptr<IfStmt> Parser::parseIf()
 {
-    throw std::runtime_error("If parsing not implemented");
+    const Token& token = expect(TokenKind::If);
+
+    auto stmt = std::make_unique<IfStmt>();
+
+    stmt->line = token.line;
+    stmt->column = token.column;
+
+    expect(TokenKind::LParen);
+
+    stmt->condition = parseExpression();
+
+    expect(TokenKind::RParen);
+
+    stmt->thenBranch = parseBlock();
+
+    if (match(TokenKind::Else))
+    {
+        stmt->elseBranch = parseBlock();
+    }
+
+    return stmt;
 }
 
 std::unique_ptr<WhileStmt> Parser::parseWhile()
 {
-    throw std::runtime_error("While parsing not implemented");
+    const Token& token = expect(TokenKind::While);
+
+    auto stmt = std::make_unique<WhileStmt>();
+
+    stmt->line = token.line;
+    stmt->column = token.column;
+
+    expect(TokenKind::LParen);
+
+    stmt->condition = parseExpression();
+
+    expect(TokenKind::RParen);
+
+    stmt->body = parseBlock();
+
+    return stmt;
 }
 
 std::unique_ptr<Expr> Parser::parsePrimary()
@@ -342,12 +412,80 @@ std::unique_ptr<Expr> Parser::parsePrimary()
     );
 }
 
-std::unique_ptr<Expr> Parser::parseExpression(int)
+std::unique_ptr<Expr> Parser::parseExpression(int minPrecedence)
 {
-    return parseUnary();
+    auto left = parseUnary();
+
+    while (true)
+    {
+        const int precedence = getPrecedence(peek().kind);
+
+        if (precedence < minPrecedence)
+        {
+            break;
+        }
+
+        const Token& op = advance();
+
+        auto right = parseExpression(precedence + 1);
+
+        auto expr = std::make_unique<BinaryExpr>();
+
+        expr->line = op.line;
+        expr->column = op.column;
+        expr->op = op.kind;
+
+        expr->left = std::move(left);
+        expr->right = std::move(right);
+
+        left = std::move(expr);
+    }
+
+    return left;
 }
 
 std::unique_ptr<Expr> Parser::parseUnary()
 {
+    if (match(TokenKind::Minus))
+    {
+        const Token& token = previous();
+
+        auto expr = std::make_unique<UnaryExpr>();
+
+        expr->line = token.line;
+        expr->column = token.column;
+        expr->op = token.kind;
+
+        expr->operand = parseUnary();
+
+        return expr;
+    }
+
     return parsePrimary();
+}
+
+int Parser::getPrecedence(TokenKind kind) const
+{
+    switch (kind)
+    {
+        case TokenKind::Equal:
+        case TokenKind::NotEqual:
+            return 1;
+
+        case TokenKind::Less:
+        case TokenKind::Greater:
+        case TokenKind::LessEqual:
+        case TokenKind::GreaterEqual:
+            return 2;
+
+        case TokenKind::Plus:
+        case TokenKind::Minus:
+            return 3;
+
+        case TokenKind::Star:
+            return 4;
+
+        default:
+            return 0;
+    }
 }

@@ -46,4 +46,6 @@ class Parser
         std::unique_ptr<Expr> parsePrimary();
         std::unique_ptr<Expr> parseUnary();
         std::unique_ptr<Expr> parseExpression(int minPrecedence = 1);
+
+        int getPrecedence(TokenKind kind) const;
 };

@@ -1,0 +1,46 @@
+fn sum(n: i64) -> i64
+{
+    mut i: i64 = n;
+    mut result: i64 = 0;
+
+    while (i > 0)
+    {
+        result = result + i;
+        i = i - 1;
+    }
+
+    return result;
+}
+
+fn main() -> i64
+{
+    mut x: i64 = sum(10);
+
+    if (x > 50)
+    {
+        x = x + 1;
+    }
+    else
+    {
+        x = 0;
+    }
+
+    while (x > 0)
+    {
+        if (x > 10)
+        {
+            x = x - 2;
+        }
+        else
+        {
+            x = x - 1;
+        }
+    }
+
+    if (x == 0)
+    {
+        return 42;
+    }
+
+    return x;
+}

@@ -1,0 +1,19 @@
+fn first() -> i64
+{
+    return 2 + 3 * 4 - 5;
+}
+
+fn second() -> i64
+{
+    return -(2 + 3) * 4;
+}
+
+fn third() -> i64
+{
+    return 10 - 3 * (2 + 1);
+}
+
+fn fourth() -> bool
+{
+    return 2 + 3 * 4 >= 10 == true;
+}

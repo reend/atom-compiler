@@ -1,0 +1,39 @@
+fn arithmetic() -> i64
+{
+    return 2 + 3 * 4;
+}
+
+fn parentheses() -> i64
+{
+    return (2 + 3) * 4;
+}
+
+fn associativity() -> i64
+{
+    return 10 - 3 - 2;
+}
+
+fn unary() -> i64
+{
+    return -2 * 3 + 4;
+}
+
+fn comparison() -> bool
+{
+    return 2 + 3 * 4 > 10;
+}
+
+fn equality() -> bool
+{
+    return 2 + 3 == 5;
+}
+
+fn sum(a: i64, b: i64) -> i64
+{
+    return a + b;
+}
+
+fn main() -> i64
+{
+    return sum(2 + 3, 4 * 5);
+}

@@ -1,6 +1,7 @@
 #include "frontend/lexer.hpp"
 #include "frontend/token.hpp"
 #include "frontend/parser.hpp"
+#include "frontend/ast_printer.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -35,25 +36,10 @@ int main(int argc, char* argv[])
         const auto tokens = lexer.tokenize();
 
         Parser parser(tokens);
-
         auto program = parser.parse();
 
-        std::cout << "Functions: "
-                << program->functions.size() << "\n";
-
-        for (const auto& function : program->functions)
-        {
-            std::cout << "Function: "
-                    << function->name << "\n";
-
-            std::cout << "Parameters: "
-                    << function->parameters.size() << "\n";
-
-            for (const auto& param : function->parameters)
-            {
-                std::cout << "  " << param.name << "\n";
-            }
-        }
+        ASTPrinter printer;
+        printer.print(*program);
     }
     catch (const std::exception& e)
     {

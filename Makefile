@@ -6,8 +6,9 @@ TARGET := atomc
 SOURCES := main.cpp \
            frontend/lexer.cpp \
 		   frontend/token.cpp \
-		   frontend/parser.cpp
-
+		   frontend/parser.cpp \
+		   frontend/ast_printer.cpp
+ 
 OBJECTS := $(SOURCES:.cpp=.o)
 DEPS := $(OBJECTS:.o=.d)
 
@@ -22,7 +23,7 @@ $(TARGET): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) -MMD -MP -c $< -o $@
 
 test: $(TARGET)
-	./$(TARGET) tests/basic.atom
+	bash tests/run_tests.sh
 
 clean:
 	rm -f $(TARGET) $(OBJECTS) $(DEPS)

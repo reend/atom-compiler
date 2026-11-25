@@ -1,0 +1,15 @@
+fn main() -> i64
+{
+    mut x: i64 = 2 + 3 * 4;
+    const y: i64 = 10;
+
+    mut flag: bool = true;
+    const result: bool = x > y;
+
+    x = x + y;
+    x = x * 2;
+
+    flag = false;
+
+    return x;
+}

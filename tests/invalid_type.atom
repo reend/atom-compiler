@@ -1,0 +1,4 @@
+fn main() -> float
+{
+    return 42;
+}
