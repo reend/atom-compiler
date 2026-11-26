@@ -6,6 +6,8 @@
 #include "middleend/ir_generator.hpp"
 #include "middleend/ir_printer.hpp"
 #include "middleend/ir_verifier.hpp"
+#include "middleend/cfg.hpp"
+#include "middleend/cfg_printer.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -53,6 +55,16 @@ int main(int argc, char* argv[])
 
         IRPrinter printer;
         printer.print(module);
+
+        CFGBuilder cfgBuilder;
+        CFGPrinter cfgPrinter;
+
+        for (const auto& function : module.functions)
+        {
+            ControlFlowGraph cfg = cfgBuilder.build(function);
+
+            cfgPrinter.print(function, cfg);
+        }
     }
     catch (const std::exception& e)
     {

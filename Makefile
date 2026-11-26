@@ -12,7 +12,9 @@ SOURCES := main.cpp \
 		   middleend/ir.cpp \
 		   middleend/ir_printer.cpp \
 		   middleend/ir_generator.cpp \
-		   middleend/ir_verifier.cpp
+		   middleend/ir_verifier.cpp \
+		   middleend/cfg.cpp \
+		   middleend/cfg_printer.cpp
  
 OBJECTS := $(SOURCES:.cpp=.o)
 DEPS := $(OBJECTS:.o=.d)

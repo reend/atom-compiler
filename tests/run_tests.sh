@@ -54,6 +54,9 @@ run_test tests/immutable_assignment.atom 1
 run_test tests/invalid_operand.atom 1
 run_test tests/invalid_argument_type.atom 1
 
+# Control Graph
+run_test tests/cfg.atom 0
+
 echo
 echo "Passed: $passed"
 echo "Failed: $failed"
