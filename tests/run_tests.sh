@@ -54,9 +54,11 @@ run_test tests/immutable_assignment.atom 1
 run_test tests/invalid_operand.atom 1
 run_test tests/invalid_argument_type.atom 1
 
-# Control Graph
+# Control Flow Graph & Constant Folding
 run_test tests/cfg.atom 0
 run_test tests/constant_folding.atom 0
+run_test tests/constant_propagation.atom 0
+run_test tests/constant_propagation_cfg.atom 0
 
 echo
 echo "Passed: $passed"

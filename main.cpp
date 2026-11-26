@@ -9,6 +9,7 @@
 #include "middleend/cfg.hpp"
 #include "middleend/cfg_printer.hpp"
 #include "middleend/constant_folding.hpp"
+#include "middleend/constant_propagation.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -55,7 +56,17 @@ int main(int argc, char* argv[])
         verifier.verify(module);
 
         ConstantFolding constantFolding;
-        constantFolding.run(module);
+        ConstantPropagation constantPropagation;
+
+        bool changed = true;
+
+        while (changed)
+        {
+            bool folded = constantFolding.run(module);
+            bool propagated = constantPropagation.run(module);
+
+            changed = folded || propagated;
+        }
 
         verifier.verify(module);
 

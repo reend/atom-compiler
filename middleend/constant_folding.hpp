@@ -7,7 +7,7 @@
 class ConstantFolding
 {
 public:
-    void run(IRModule& module);
+    bool run(IRModule& module);
 
 private:
     std::unordered_map<VReg, std::int64_t> constants_;
@@ -21,4 +21,6 @@ private:
 
     void replaceWithConstant(IRInstruction& instruction,
                              std::int64_t value);
+
+    bool changed_ = false;
 };

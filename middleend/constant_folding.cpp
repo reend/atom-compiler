@@ -1,12 +1,16 @@
 #include "constant_folding.hpp"
 #include <limits>
 
-void ConstantFolding::run(IRModule& module)
+bool ConstantFolding::run(IRModule& module)
 {
+    changed_ = false;
+
     for (auto& function : module.functions)
     {
         runFunction(function);
     }
+
+    return changed_;
 }
 
 void ConstantFolding::runFunction(IRFunction& function)
@@ -63,6 +67,8 @@ void ConstantFolding::replaceWithConstant(
     instruction.callee = {};
 
     constants_[*instruction.destination] = value;
+
+    changed_ = true;
 }
 
 void ConstantFolding::foldInstruction(IRInstruction& instruction)

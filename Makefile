@@ -15,7 +15,8 @@ SOURCES := main.cpp \
 		   middleend/ir_verifier.cpp \
 		   middleend/cfg.cpp \
 		   middleend/cfg_printer.cpp \
-		   middleend/constant_folding.cpp
+		   middleend/constant_folding.cpp \
+		   middleend/constant_propagation.cpp
  
 OBJECTS := $(SOURCES:.cpp=.o)
 DEPS := $(OBJECTS:.o=.d)
