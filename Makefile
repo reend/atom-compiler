@@ -8,7 +8,11 @@ SOURCES := main.cpp \
 		   frontend/token.cpp \
 		   frontend/parser.cpp \
 		   frontend/ast_printer.cpp \
-		   frontend/semantic.cpp
+		   frontend/semantic.cpp \
+		   middleend/ir.cpp \
+		   middleend/ir_printer.cpp \
+		   middleend/ir_generator.cpp \
+		   middleend/ir_verifier.cpp
  
 OBJECTS := $(SOURCES:.cpp=.o)
 DEPS := $(OBJECTS:.o=.d)

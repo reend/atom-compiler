@@ -3,6 +3,9 @@
 #include "frontend/parser.hpp"
 #include "frontend/ast_printer.hpp"
 #include "frontend/semantic.hpp"
+#include "middleend/ir_generator.hpp"
+#include "middleend/ir_printer.hpp"
+#include "middleend/ir_verifier.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -42,8 +45,14 @@ int main(int argc, char* argv[])
         SemanticAnalyzer semantic;
         semantic.analyze(*program);
 
-        ASTPrinter printer;
-        printer.print(*program);
+        IRGenerator generator;
+        IRModule module = generator.generate(*program);
+
+        IRVerifier verifier;
+        verifier.verify(module);
+
+        IRPrinter printer;
+        printer.print(module);
     }
     catch (const std::exception& e)
     {
