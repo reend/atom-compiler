@@ -1,14 +1,9 @@
 #include "frontend/lexer.hpp"
-#include "frontend/token.hpp"
 #include "frontend/parser.hpp"
-#include "frontend/ast_printer.hpp"
 #include "frontend/semantic.hpp"
 
 #include "middleend/ir_generator.hpp"
-#include "middleend/ir_printer.hpp"
 #include "middleend/ir_verifier.hpp"
-#include "middleend/cfg.hpp"
-#include "middleend/cfg_printer.hpp"
 #include "middleend/constant_folding.hpp"
 #include "middleend/constant_propagation.hpp"
 #include "middleend/dead_code_elimination.hpp"
@@ -113,7 +108,7 @@ if (!assembly)
     driver.assemble(files.assembly, files.object);
     driver.link(files.object, files.executable);
     driver.cleanup(files);
-    
+
     }
     catch (const std::exception& e)
     {
