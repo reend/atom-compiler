@@ -17,7 +17,9 @@ SOURCES := main.cpp \
 		   middleend/cfg_printer.cpp \
 		   middleend/constant_folding.cpp \
 		   middleend/constant_propagation.cpp \
-		   middleend/dead_code_elimination.cpp
+		   middleend/dead_code_elimination.cpp \
+		   backend/code_generator.cpp \
+		   driver.cpp
  
 OBJECTS := $(SOURCES:.cpp=.o)
 DEPS := $(OBJECTS:.o=.d)
@@ -37,5 +39,6 @@ test: $(TARGET)
 
 clean:
 	rm -f $(TARGET) $(OBJECTS) $(DEPS)
+	rm -rf bin/
 
 -include $(DEPS)

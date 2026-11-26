@@ -35,3 +35,7 @@ core.*
 
 # Compilation database
 compile_commands.json
+
+# etc
+/backend
+/bin/

@@ -13,17 +13,22 @@
 #include "middleend/constant_propagation.hpp"
 #include "middleend/dead_code_elimination.hpp"
 
+#include "backend/code_generator.hpp"
+
+#include "driver.hpp"
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <string>
 #include <exception>
+#include <stdexcept>
 
 int main(int argc, char* argv[])
 {
     if (argc != 2)
     {
-        std::cerr << "Usage: atomc <file.atom>\n";
+        std::cerr << "Usage: atomc <source.atom>\n";
         return 1;
     }
 
@@ -31,17 +36,19 @@ int main(int argc, char* argv[])
 
     if (!file)
     {
-        std::cerr << "Failed to open file\n";
+        std::cerr << "Cannot open file: " << argv[1] << '\n';
         return 1;
     }
 
-    std::ostringstream buffer;
+    std::stringstream buffer;
     buffer << file.rdbuf();
 
-    const std::string source = buffer.str();
+    std::string source = buffer.str();
 
     try
     {
+        // Frontend
+
         Lexer lexer(source);
         const auto tokens = lexer.tokenize();
 
@@ -51,11 +58,15 @@ int main(int argc, char* argv[])
         SemanticAnalyzer semantic;
         semantic.analyze(*program);
 
+        // Middleend
+
         IRGenerator generator;
         IRModule module = generator.generate(*program);
 
         IRVerifier verifier;
         verifier.verify(module);
+
+        // Optimization
 
         ConstantFolding constantFolding;
         ConstantPropagation constantPropagation;
@@ -74,17 +85,35 @@ int main(int argc, char* argv[])
 
         verifier.verify(module);
 
-        IRPrinter printer;
-        printer.print(module);
+        // Backend
 
-        CFGBuilder cfgBuilder;
-        CFGPrinter cfgPrinter;
+CompilerDriver driver;
 
-        for (const auto& function : module.functions)
-        {
-            ControlFlowGraph cfg = cfgBuilder.build(function);
-            cfgPrinter.print(function, cfg);
-        }
+OutputFiles files = driver.createOutputFiles(argv[1]);
+
+std::ofstream assembly(files.assembly);
+
+if (!assembly)
+{
+    throw std::runtime_error(
+        "Cannot create assembly file");
+}
+
+    CodeGenerator codeGenerator;
+    codeGenerator.generate(module, assembly);
+
+    assembly.close();
+
+    if (!assembly)
+    {
+        throw std::runtime_error(
+            "Cannot write assembly file");
+    }
+
+    driver.assemble(files.assembly, files.object);
+    driver.link(files.object, files.executable);
+    driver.cleanup(files);
+    
     }
     catch (const std::exception& e)
     {

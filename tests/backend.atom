@@ -1,0 +1,9 @@
+fn sum(a: i64, b: i64) -> i64
+{
+    return a + b;
+}
+
+fn main() -> i64
+{
+    return sum(10, 20);
+}
