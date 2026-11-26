@@ -3,6 +3,7 @@
 #include "frontend/parser.hpp"
 #include "frontend/ast_printer.hpp"
 #include "frontend/semantic.hpp"
+
 #include "middleend/ir_generator.hpp"
 #include "middleend/ir_printer.hpp"
 #include "middleend/ir_verifier.hpp"
@@ -10,6 +11,7 @@
 #include "middleend/cfg_printer.hpp"
 #include "middleend/constant_folding.hpp"
 #include "middleend/constant_propagation.hpp"
+#include "middleend/dead_code_elimination.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -57,6 +59,7 @@ int main(int argc, char* argv[])
 
         ConstantFolding constantFolding;
         ConstantPropagation constantPropagation;
+        DeadCodeElimination deadCodeElimination;
 
         bool changed = true;
 
@@ -64,8 +67,9 @@ int main(int argc, char* argv[])
         {
             bool folded = constantFolding.run(module);
             bool propagated = constantPropagation.run(module);
+            bool eliminated = deadCodeElimination.run(module);
 
-            changed = folded || propagated;
+            changed = folded || propagated || eliminated;
         }
 
         verifier.verify(module);

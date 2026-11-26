@@ -60,6 +60,11 @@ run_test tests/constant_folding.atom 0
 run_test tests/constant_propagation.atom 0
 run_test tests/constant_propagation_cfg.atom 0
 
+# DCE
+
+run_test tests/dead_code_elimination.atom 0
+run_test tests/unreachable_blocks.atom 0
+
 echo
 echo "Passed: $passed"
 echo "Failed: $failed"

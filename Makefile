@@ -16,7 +16,8 @@ SOURCES := main.cpp \
 		   middleend/cfg.cpp \
 		   middleend/cfg_printer.cpp \
 		   middleend/constant_folding.cpp \
-		   middleend/constant_propagation.cpp
+		   middleend/constant_propagation.cpp \
+		   middleend/dead_code_elimination.cpp
  
 OBJECTS := $(SOURCES:.cpp=.o)
 DEPS := $(OBJECTS:.o=.d)
