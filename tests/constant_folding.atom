@@ -1,0 +1,8 @@
+fn main() -> i64
+{
+    const x: i64 = 2 + 3 * 4;
+    const y: i64 = -10;
+    const flag: bool = 10 < 20;
+
+    return x;
+}

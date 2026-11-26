@@ -8,6 +8,7 @@
 #include "middleend/ir_verifier.hpp"
 #include "middleend/cfg.hpp"
 #include "middleend/cfg_printer.hpp"
+#include "middleend/constant_folding.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -53,6 +54,11 @@ int main(int argc, char* argv[])
         IRVerifier verifier;
         verifier.verify(module);
 
+        ConstantFolding constantFolding;
+        constantFolding.run(module);
+
+        verifier.verify(module);
+
         IRPrinter printer;
         printer.print(module);
 
@@ -62,13 +68,12 @@ int main(int argc, char* argv[])
         for (const auto& function : module.functions)
         {
             ControlFlowGraph cfg = cfgBuilder.build(function);
-
             cfgPrinter.print(function, cfg);
         }
     }
     catch (const std::exception& e)
     {
-        std::cerr << e.what() << "\n";
+        std::cerr << e.what() << '\n';
         return 1;
     }
 

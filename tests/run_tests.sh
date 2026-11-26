@@ -56,6 +56,7 @@ run_test tests/invalid_argument_type.atom 1
 
 # Control Graph
 run_test tests/cfg.atom 0
+run_test tests/constant_folding.atom 0
 
 echo
 echo "Passed: $passed"

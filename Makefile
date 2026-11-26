@@ -14,7 +14,8 @@ SOURCES := main.cpp \
 		   middleend/ir_generator.cpp \
 		   middleend/ir_verifier.cpp \
 		   middleend/cfg.cpp \
-		   middleend/cfg_printer.cpp
+		   middleend/cfg_printer.cpp \
+		   middleend/constant_folding.cpp
  
 OBJECTS := $(SOURCES:.cpp=.o)
 DEPS := $(OBJECTS:.o=.d)
